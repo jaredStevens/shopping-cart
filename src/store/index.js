@@ -1,5 +1,6 @@
 import Vuex from 'vuex'
 import Vue from 'vue'
+import shop from '@/api/shop'
 
 Vue.use(Vuex)
 
@@ -8,14 +9,18 @@ export default new Vuex.Store({
     products: []
   },
   getters: { // = computed properties
-    productsCount() {
-      // ... length of products array
+    availableProducts(state, getters) {
+      return state.products.filter(product => product.inventory > 0)
     }
   },
   actions: { // = methods // can be complex but never update the state
-    fetchProducts() {
-      //make the call
-      // run setProducts mutation
+    fetchProducts({commit}) {
+      return new Promise((resolve, reject) => {
+      shop.getProducts(products => {
+        commit("setProducts", products)
+        resolve()
+      })
+    })
     }
   },
   mutations: { // setting and updating the state // mutations should be as simple as possible
