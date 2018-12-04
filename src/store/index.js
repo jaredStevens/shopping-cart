@@ -15,8 +15,8 @@ export default new Vuex.Store({
     availableProducts(state, getters) {
       return state.products.filter(product => product.inventory > 0)
     },
-    cartProducts (state){
-      return state.cart.map(cartItem =>{
+    cartProducts(state) {
+      return state.cart.map(cartItem => {
         const product = state.products.find(product => product.id === cartItem.id)
         return {
           title: product.title,
@@ -25,7 +25,7 @@ export default new Vuex.Store({
         }
       })
     },
-    cartTotal (state, getters) {
+    cartTotal(state, getters) {
       return getters.cartProducts.reduce((total, product) =>
         total + product.price * product.quantity, 0)
     }
@@ -52,7 +52,10 @@ export default new Vuex.Store({
         context.commit('decrementProductInventory', product)
       }
     },
-    checkout({state, commit}) {
+    checkout({
+      state,
+      commit
+    }) {
       shop.buyProducts(
         state.cart,
         () => {
@@ -70,8 +73,8 @@ export default new Vuex.Store({
       // update products 
       state.products = products
     },
-    pushProductToCart (state, productId) {
-      state.cart.push ({
+    pushProductToCart(state, productId) {
+      state.cart.push({
         id: productId,
         quantity: 1
       })
